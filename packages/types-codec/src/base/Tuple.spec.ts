@@ -3,12 +3,10 @@
 
 /// <reference types="@polkadot/dev-test/globals.d.ts" />
 
-import type { BlockNumber, VoteThreshold } from '@polkadot/types/interfaces';
 import type { AnyTupleValue, CodecTo } from '@polkadot/types-codec/types';
 
-import { Metadata, TypeRegistry } from '@polkadot/types';
+import { TypeRegistry } from '@polkadot/types';
 import { Text, Tuple, U32, U128 } from '@polkadot/types-codec';
-import rpcMetadata from '@polkadot/types-support/metadata/static-substrate';
 import { stringToU8a } from '@polkadot/util';
 
 describe('Tuple', (): void => {
@@ -88,31 +86,8 @@ describe('Tuple', (): void => {
     ).toEqual('["foo",69,42]');
   });
 
-  it('creates properly via actual hex string', (): void => {
-    const metadata = new Metadata(registry, rpcMetadata);
-
-    registry.setMetadata(metadata);
-
-    const test = new (Tuple.with([
-      registry.createClass('BlockNumber'), registry.createClass('VoteThreshold')
-    ]
-    ))(registry, '0x6219000001');
-
-    expect((test[0] as BlockNumber).toNumber()).toEqual(6498);
-    expect((test[1] as VoteThreshold).toNumber()).toEqual(1);
-  });
-
   it('exposes the Types', (): void => {
     expect(tuple.Types).toEqual(['Text', 'u32']);
-  });
-
-  it('exposes the Types (object creation)', (): void => {
-    const test = new Tuple(registry, {
-      BlockNumber: registry.createClass('BlockNumber'),
-      VoteThreshold: registry.createClass('VoteThreshold')
-    }, []);
-
-    expect(test.Types).toEqual(['BlockNumber', 'VoteThreshold']);
   });
 
   it('exposes filter', (): void => {

@@ -6,8 +6,7 @@ import type { UInt } from '@polkadot/types-codec';
 import type { TypeDef } from '@polkadot/types-create/types';
 import type { ModuleTypes, TypeImports } from './imports.js';
 
-import { GenericAccountId, GenericCall, GenericLookupSource, GenericVote } from '@polkadot/types/generic';
-import { AllConvictions } from '@polkadot/types/interfaces/democracy/definitions';
+import { GenericAccountId, GenericCall, GenericLookupSource } from '@polkadot/types/generic';
 import { AbstractInt, bool, Compact, Enum, Null, Option, Struct, Tuple, Vec, WrapperKeepOpaque, WrapperOpaque } from '@polkadot/types-codec';
 import { getTypeDef, TypeDefInfo } from '@polkadot/types-create';
 import { isChildClass, stringify } from '@polkadot/util';
@@ -18,8 +17,6 @@ import { setImports } from './imports.js';
 function arrayToStrType (arr: string[]): string {
   return `${arr.map((c) => `'${c}'`).join(' | ')}`;
 }
-
-const voteConvictions = arrayToStrType(AllConvictions);
 
 // Make types a little bit more flexible
 // - if param instanceof AbstractInt, then param: u64 | Uint8array | AnyNumber
@@ -108,8 +105,6 @@ export function getSimilarTypes (registry: Registry, definitions: Record<string,
     } else {
       possibleTypes.push('object', 'string');
     }
-  } else if (isChildClass(GenericVote, Clazz)) {
-    possibleTypes.push(`{ aye: boolean; conviction?: ${voteConvictions} | number }`, 'boolean', 'string', 'Uint8Array');
   } else if (isChildClass(WrapperKeepOpaque, Clazz) || isChildClass(WrapperOpaque, Clazz)) {
     // TODO inspect container
     possibleTypes.push('object', 'string', 'Uint8Array');

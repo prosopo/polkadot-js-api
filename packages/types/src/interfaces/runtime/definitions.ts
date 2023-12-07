@@ -51,7 +51,6 @@ export default {
   types: {
     ...numberTypes,
     AccountId: 'AccountId32',
-    AccountId20: 'GenericEthereumAccountId',
     AccountId32: 'GenericAccountId32',
     AccountId33: 'GenericAccountId33',
     AccountIdOf: 'AccountId',

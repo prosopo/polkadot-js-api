@@ -5,20 +5,16 @@
 
 import type { HexString } from '@polkadot/util/types';
 
-import kusama from '@polkadot/types-support/metadata/static-kusama';
-import polkadot from '@polkadot/types-support/metadata/static-polkadot';
 import substrate from '@polkadot/types-support/metadata/static-substrate';
 
 import { TypeRegistry } from '../create/index.js';
 import { Metadata } from './Metadata.js';
 
 const allData: Record<string, HexString> = {
-  kusama,
-  polkadot,
   substrate
 };
 
-for (const type of ['kusama', 'polkadot', 'substrate'] as const) {
+for (const type of ['substrate'] as const) {
   describe(`${type}metadata`, (): void => {
     const metadata = new Metadata(new TypeRegistry(), allData[type]);
 

@@ -3,59 +3,16 @@
 
 import '@polkadot/types-augment';
 
-import type { Bytes, Compact, Option, u32 } from '@polkadot/types-codec';
-import type { IOption, ITuple } from '@polkadot/types-codec/types';
-import type { AccountId, BlockAttestations, SessionKeys7 } from './interfaces/index.js';
-
 import { assert } from '@polkadot/util';
 
 import { TypeRegistry } from './create/index.js';
 
 const registry = new TypeRegistry();
 
-// something that uses overrides
-const oo0 = registry.createType('Something' as 'u32');
-const oo1 = registry.createType<BlockAttestations>('u32');
-const oo2 = registry.createType<SessionKeys7>('u32');
-const oo3 = registry.createType<u32>('Something');
-const oo4 = registry.createType<AccountId>('Option<u32>');
-const oo5 = registry.createType<IOption<u32>>('u32');
-const oo6 = registry.createType<Option<Compact<u32>>>('u32');
-const oo7 = registry.createType<Bytes>('u64');
-const oo8 = registry.createType<ITuple<[Bytes, u32]>>('(u32)');
-
-assert(oo0.divn(123) && [...oo1.values()] && oo2[6].isAscii && oo3.divn(3) && oo4.isAscii && oo5.unwrap().divn(1) && oo6.unwrap().unwrap().divn(1) && oo7.isAscii && oo8[1].toNumber(), 'All ok');
-
-// There are in the interface registry
-const aa0 = registry.createType(' AccountId');
-const aa1 = registry.createType('BlockAttestations');
-const aa2 = registry.createType('ExtrinsicEra');
-const aa3 = registry.createType('VestingInfo');
-const aa4 = registry.createType('(Vec<ValidatorIndex>, CompactAssignmentsTo257, PhragmenScore, EraIndex)');
-
-assert(aa0.isAscii && aa1.receipt && aa2.isMortalEra && aa3.toHuman() && aa4[3].toNumber(), 'All ok');
-
 // Should be Codec, we don't know this one
 const bb = registry.createType('Something');
 
 assert(bb.toHuman(), 'All ok');
-
-// Should be Vec<Option<Compact<ReferendumIndex>>>
-const ee = registry.createType('Vec<Option<Compact<ReferendumIndex>>>');
-// Option<Bytes>
-const vb = registry.createType('Option< Vec< u8 > >');
-// nested vecs
-const vv = registry.createType('Vec< Vec< Vec< Vec<u8>> > >');
-// vec with tuple
-const vt = registry.createType('Vec<(u8, u16)>');
-// nested stuff from all-over
-const vn = registry.createType('Vec<(u32, (u32, u64), Vec<u8>, Vec<u32>, Vec<(u32, u64)>, [u8;32], [u128;32])>');
-// nested fixed
-const nf = registry.createType('[[[u8;32];5];3]');
-// with linkage
-const tl = registry.createType('(ValidatorPrefsWithCommission, Linkage<AccountId>)');
-
-assert(ee[0].unwrap().unwrap().divn(123) && vb.unwrap().bitLength() && vv.toHuman() && vn[0][3][0].bitLength() && vt.toHuman() && nf.toHuman() && tl[1].next, 'All ok');
 
 // tuple & struct
 const vs = registry.createType('(u8, {"a":"u32","b":"(u32,u64)"},(u8,u16),{"foo":"Bar"},u16)');

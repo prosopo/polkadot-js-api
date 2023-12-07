@@ -3,8 +3,7 @@
 
 /// <reference types="@polkadot/dev-test/globals.d.ts" />
 
-import type { PropIndex } from '@polkadot/types/interfaces/democracy';
-import type { Codec, CodecTo, ITuple } from '@polkadot/types-codec/types';
+import type { Codec, CodecTo } from '@polkadot/types-codec/types';
 
 import { createTypeUnsafe, GenericAccountId as AccountId, Metadata, TypeRegistry } from '@polkadot/types';
 import { Text, u32, Vec } from '@polkadot/types-codec';
@@ -37,15 +36,6 @@ describe('Vec', (): void => {
     it('allows construction via hex & null values', (): void => {
       // @ts-expect-error We are intentionally passing a non-valid input
       expect(new Vec(registry, Text, null)).toHaveLength(0);
-    });
-
-    it('decodes a complex type via construction (1)', (): void => {
-      const test = createTypeUnsafe<Vec<ITuple<[PropIndex, AccountId]>>>(registry, 'Vec<(PropIndex, AccountId)>', [new Uint8Array([
-        4, 10, 0, 0, 0, 209, 114, 167, 76, 218, 76, 134, 89, 18, 195, 43, 160, 168, 10, 87, 174, 105, 171, 174, 65, 14, 92, 203, 89, 222, 232, 78, 47, 68, 50, 219, 79
-      ])]);
-
-      expect(test[0][0].toNumber()).toEqual(10);
-      expect(test[0][1].toString()).toEqual('5GoKvZWG5ZPYL1WUovuHW3zJBWBP5eT8CbqjdRY4Q6iMaQua');
     });
 
     it('decodes a complex type via construction (2)', (): void => {

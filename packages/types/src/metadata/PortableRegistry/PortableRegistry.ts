@@ -66,8 +66,6 @@ const PATHS_ALIAS = splitNamespace([
   'sp_weights::weight_v2::Weight',
   // wildcard matching in place...
   // these have a specific encoding or logic, use a wildcard for {pallet, darwinia}_democracy
-  '*_democracy::vote::Vote',
-  '*_conviction_voting::vote::Vote',
   '*_identity::types::Data',
   // these are opaque Vec<u8> wrappers
   'sp_core::OpaqueMetadata',

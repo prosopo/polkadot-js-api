@@ -42,7 +42,9 @@
   "devDependencies": {
     "@polkadot/dev": "^0.77.1",
     "@polkadot/typegen": "workspace:packages/typegen",
-    "@types/node": "^20.9.1"
+    "@types/node": "^20.9.1",
+    "eslint-plugin-sort-imports-es6-autofix": "^0.6.0",
+    "eslint-plugin-unused-imports": "^3.0.0"
   },
   "resolutions": {
     "typescript": "^5.2.2"

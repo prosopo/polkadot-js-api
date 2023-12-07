@@ -11,8 +11,6 @@ import Handlebars from 'handlebars';
 import path from 'node:path';
 
 import * as defaultDefinitions from '@polkadot/types/interfaces/definitions';
-import staticKusama from '@polkadot/types-support/metadata/static-kusama';
-import staticPolkadot from '@polkadot/types-support/metadata/static-polkadot';
 import staticSubstrate from '@polkadot/types-support/metadata/static-substrate';
 import { isString, stringify } from '@polkadot/util';
 
@@ -269,9 +267,7 @@ export function generateDefaultLookup (destDir = 'packages/types-augment/src/loo
     staticData
       ? [['lookup', staticData]]
       : [
-        ['substrate', staticSubstrate],
-        ['polkadot', staticPolkadot],
-        ['kusama', staticKusama]
+        ['substrate', staticSubstrate]
       ]
   );
 }

@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/api-derive authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { AccountId, AccountIndex, RegistrationJudgement } from '@polkadot/types/interfaces';
+import type { AccountId, AccountIndex } from '@polkadot/types/interfaces';
 
 export type AccountIdAndIndex = [AccountId | undefined, AccountIndex | undefined];
 
@@ -19,25 +19,9 @@ export interface DeriveAccountRegistration {
   riot?: string | undefined;
   twitter?: string | undefined;
   web?: string | undefined;
-  judgements: RegistrationJudgement[];
-}
-
-export interface DeriveAccountFlags {
-  isCouncil: boolean;
-  isSociety: boolean;
-  isSudo: boolean;
-  isTechCommittee: boolean;
 }
 
 export interface DeriveAccountInfo {
   accountId?: AccountId | undefined;
   accountIndex?: AccountIndex | undefined;
-  identity: DeriveAccountRegistration;
-  nickname?: string | undefined;
-}
-
-export interface DeriveHasIdentity {
-  display?: string | undefined;
-  hasIdentity: boolean;
-  parentId?: string | undefined;
 }

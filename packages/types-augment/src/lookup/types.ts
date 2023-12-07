@@ -2,5 +2,4 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import './types-substrate.js';
-import './types-polkadot.js';
-import './types-kusama.js';
+

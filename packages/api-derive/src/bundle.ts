@@ -22,68 +22,8 @@ export { lazyDeriveSection };
 
 // Enable derive only if some of these modules are available
 const checks: Record<string, Avail> = {
-  allianceMotion: {
-    instances: ['allianceMotion'],
-    methods: []
-  },
-  bagsList: {
-    instances: ['voterBagsList', 'voterList', 'bagsList'],
-    methods: [],
-    withDetect: true
-  },
   contracts: {
     instances: ['contracts'],
-    methods: []
-  },
-  council: {
-    instances: ['council'],
-    methods: [],
-    withDetect: true
-  },
-  crowdloan: {
-    instances: ['crowdloan'],
-    methods: []
-  },
-  democracy: {
-    instances: ['democracy'],
-    methods: []
-  },
-  elections: {
-    instances: ['phragmenElection', 'electionsPhragmen', 'elections', 'council'],
-    methods: [],
-    withDetect: true
-  },
-  imOnline: {
-    instances: ['imOnline'],
-    methods: []
-  },
-  membership: {
-    instances: ['membership'],
-    methods: []
-  },
-  parachains: {
-    instances: ['parachains', 'registrar'],
-    methods: []
-  },
-  session: {
-    instances: ['session'],
-    methods: []
-  },
-  society: {
-    instances: ['society'],
-    methods: []
-  },
-  staking: {
-    instances: ['staking'],
-    methods: ['erasRewardPoints']
-  },
-  technicalCommittee: {
-    instances: ['technicalCommittee'],
-    methods: [],
-    withDetect: true
-  },
-  treasury: {
-    instances: ['treasury'],
     methods: []
   }
 };

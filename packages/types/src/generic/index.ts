@@ -11,7 +11,3 @@ export { GenericConsensusEngineId } from './ConsensusEngineId.js';
 export { GenericEvent, GenericEventData } from './Event.js';
 export { GenericLookupSource } from './LookupSource.js';
 export { GenericMultiAddress as GenericAddress, GenericMultiAddress } from './MultiAddress.js';
-export { GenericVote } from './Vote.js';
-
-// all starred
-export * from '../ethereum/index.js';

@@ -11,6 +11,7 @@ const BASE = 'packages/api-augment/src';
 const METAS = Object.entries<HexString>({ substrate });
 
 export function main (): void {
+  console.log('generating ts defs');
   generateDefaultInterface();
   generateDefaultLookup();
   generateDefaultRpc();

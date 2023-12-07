@@ -72,6 +72,7 @@ async function mainPromise (): Promise<void> {
     [pkg]: userDefs
   };
 
+  console.log('generating ts defs');
   generateTsDef(allDefs, inputPath, pkg);
   generateInterfaceTypes(allDefs, path.join(inputPath, 'augment-types.ts'));
 

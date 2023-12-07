@@ -7,25 +7,18 @@ import '@polkadot/rpc-core/types/jsonrpc';
 
 import type { AugmentedRpc } from '@polkadot/rpc-core/types';
 import type { Metadata, StorageKey } from '@polkadot/types';
-import type { Bytes, HashMap, Json, Null, Option, Text, U256, U64, Vec, bool, f64, u32, u64 } from '@polkadot/types-codec';
+import type { Bytes, HashMap, Null, Option, Text, Vec, bool, u32, u64 } from '@polkadot/types-codec';
 import type { AnyNumber, Codec } from '@polkadot/types-codec/types';
 import type { ExtrinsicOrHash, ExtrinsicStatus } from '@polkadot/types/interfaces/author';
 import type { EpochAuthorship } from '@polkadot/types/interfaces/babe';
-import type { BeefyVersionedFinalityProof } from '@polkadot/types/interfaces/beefy';
 import type { BlockHash } from '@polkadot/types/interfaces/chain';
 import type { PrefixedStorageKey } from '@polkadot/types/interfaces/childstate';
 import type { AuthorityId } from '@polkadot/types/interfaces/consensus';
 import type { CodeUploadRequest, CodeUploadResult, ContractCallRequest, ContractExecResult, ContractInstantiateResult, InstantiateRequestV1 } from '@polkadot/types/interfaces/contracts';
-import type { BlockStats } from '@polkadot/types/interfaces/dev';
-import type { CreatedBlock } from '@polkadot/types/interfaces/engine';
-import type { EthAccount, EthCallRequest, EthFeeHistory, EthFilter, EthFilterChanges, EthLog, EthReceipt, EthRichBlock, EthSubKind, EthSubParams, EthSyncStatus, EthTransaction, EthTransactionRequest, EthWork } from '@polkadot/types/interfaces/eth';
 import type { Extrinsic } from '@polkadot/types/interfaces/extrinsics';
-import type { EncodedFinalityProofs, JustificationNotification, ReportedRoundStates } from '@polkadot/types/interfaces/grandpa';
-import type { MmrHash, MmrLeafBatchProof } from '@polkadot/types/interfaces/mmr';
-import type { StorageKind } from '@polkadot/types/interfaces/offchain';
 import type { FeeDetails, RuntimeDispatchInfoV1 } from '@polkadot/types/interfaces/payment';
 import type { RpcMethods } from '@polkadot/types/interfaces/rpc';
-import type { AccountId, BlockNumber, H160, H256, H64, Hash, Header, Index, Justification, KeyValue, SignedBlock, StorageData } from '@polkadot/types/interfaces/runtime';
+import type { AccountId, BlockNumber, H256, Hash, Header, Index, KeyValue, SignedBlock, StorageData } from '@polkadot/types/interfaces/runtime';
 import type { MigrationStatusResult, ReadProof, RuntimeVersion, TraceBlockResponse } from '@polkadot/types/interfaces/state';
 import type { ApplyExtrinsicResult, ChainProperties, ChainType, Health, NetworkState, NodeRole, PeerInfo, SyncState } from '@polkadot/types/interfaces/system';
 import type { IExtrinsic, Observable } from '@polkadot/types/types';
@@ -73,16 +66,6 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
        * Returns data about which slots (primary or secondary) can be claimed in the current epoch with the keys in the keystore
        **/
       epochAuthorship: AugmentedRpc<() => Observable<HashMap<AuthorityId, EpochAuthorship>>>;
-    };
-    beefy: {
-      /**
-       * Returns hash of the latest BEEFY finalized block as seen by this client.
-       **/
-      getFinalizedHead: AugmentedRpc<() => Observable<H256>>;
-      /**
-       * Returns the block most recently finalized by BEEFY, alongside its justification.
-       **/
-      subscribeJustifications: AugmentedRpc<() => Observable<BeefyVersionedFinalityProof>>;
     };
     chain: {
       /**
@@ -166,252 +149,6 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
        * Upload new code without instantiating a contract from it
        **/
       uploadCode: AugmentedRpc<(uploadRequest: CodeUploadRequest | { origin?: any; code?: any; storageDepositLimit?: any } | string | Uint8Array, at?: BlockHash | string | Uint8Array) => Observable<CodeUploadResult>>;
-    };
-    dev: {
-      /**
-       * Reexecute the specified `block_hash` and gather statistics while doing so
-       **/
-      getBlockStats: AugmentedRpc<(at: Hash | string | Uint8Array) => Observable<Option<BlockStats>>>;
-    };
-    engine: {
-      /**
-       * Instructs the manual-seal authorship task to create a new block
-       **/
-      createBlock: AugmentedRpc<(createEmpty: bool | boolean | Uint8Array, finalize: bool | boolean | Uint8Array, parentHash?: BlockHash | string | Uint8Array) => Observable<CreatedBlock>>;
-      /**
-       * Instructs the manual-seal authorship task to finalize a block
-       **/
-      finalizeBlock: AugmentedRpc<(hash: BlockHash | string | Uint8Array, justification?: Justification) => Observable<bool>>;
-    };
-    eth: {
-      /**
-       * Returns accounts list.
-       **/
-      accounts: AugmentedRpc<() => Observable<Vec<H160>>>;
-      /**
-       * Returns the blockNumber
-       **/
-      blockNumber: AugmentedRpc<() => Observable<U256>>;
-      /**
-       * Call contract, returning the output data.
-       **/
-      call: AugmentedRpc<(request: EthCallRequest | { from?: any; to?: any; gasPrice?: any; gas?: any; value?: any; data?: any; nonce?: any } | string | Uint8Array, number?: BlockNumber | AnyNumber | Uint8Array) => Observable<Bytes>>;
-      /**
-       * Returns the chain ID used for transaction signing at the current best block. None is returned if not available.
-       **/
-      chainId: AugmentedRpc<() => Observable<U64>>;
-      /**
-       * Returns block author.
-       **/
-      coinbase: AugmentedRpc<() => Observable<H160>>;
-      /**
-       * Estimate gas needed for execution of given contract.
-       **/
-      estimateGas: AugmentedRpc<(request: EthCallRequest | { from?: any; to?: any; gasPrice?: any; gas?: any; value?: any; data?: any; nonce?: any } | string | Uint8Array, number?: BlockNumber | AnyNumber | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns fee history for given block count & reward percentiles
-       **/
-      feeHistory: AugmentedRpc<(blockCount: U256 | AnyNumber | Uint8Array, newestBlock: BlockNumber | AnyNumber | Uint8Array, rewardPercentiles: Option<Vec<f64>> | null | Uint8Array | Vec<f64> | (f64)[]) => Observable<EthFeeHistory>>;
-      /**
-       * Returns current gas price.
-       **/
-      gasPrice: AugmentedRpc<() => Observable<U256>>;
-      /**
-       * Returns balance of the given account.
-       **/
-      getBalance: AugmentedRpc<(address: H160 | string | Uint8Array, number?: BlockNumber | AnyNumber | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns block with given hash.
-       **/
-      getBlockByHash: AugmentedRpc<(hash: H256 | string | Uint8Array, full: bool | boolean | Uint8Array) => Observable<Option<EthRichBlock>>>;
-      /**
-       * Returns block with given number.
-       **/
-      getBlockByNumber: AugmentedRpc<(block: BlockNumber | AnyNumber | Uint8Array, full: bool | boolean | Uint8Array) => Observable<Option<EthRichBlock>>>;
-      /**
-       * Returns the number of transactions in a block with given hash.
-       **/
-      getBlockTransactionCountByHash: AugmentedRpc<(hash: H256 | string | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns the number of transactions in a block with given block number.
-       **/
-      getBlockTransactionCountByNumber: AugmentedRpc<(block: BlockNumber | AnyNumber | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns the code at given address at given time (block number).
-       **/
-      getCode: AugmentedRpc<(address: H160 | string | Uint8Array, number?: BlockNumber | AnyNumber | Uint8Array) => Observable<Bytes>>;
-      /**
-       * Returns filter changes since last poll.
-       **/
-      getFilterChanges: AugmentedRpc<(index: U256 | AnyNumber | Uint8Array) => Observable<EthFilterChanges>>;
-      /**
-       * Returns all logs matching given filter (in a range 'from' - 'to').
-       **/
-      getFilterLogs: AugmentedRpc<(index: U256 | AnyNumber | Uint8Array) => Observable<Vec<EthLog>>>;
-      /**
-       * Returns logs matching given filter object.
-       **/
-      getLogs: AugmentedRpc<(filter: EthFilter | { fromBlock?: any; toBlock?: any; blockHash?: any; address?: any; topics?: any } | string | Uint8Array) => Observable<Vec<EthLog>>>;
-      /**
-       * Returns proof for account and storage.
-       **/
-      getProof: AugmentedRpc<(address: H160 | string | Uint8Array, storageKeys: Vec<H256> | (H256 | string | Uint8Array)[], number: BlockNumber | AnyNumber | Uint8Array) => Observable<EthAccount>>;
-      /**
-       * Returns content of the storage at given address.
-       **/
-      getStorageAt: AugmentedRpc<(address: H160 | string | Uint8Array, index: U256 | AnyNumber | Uint8Array, number?: BlockNumber | AnyNumber | Uint8Array) => Observable<H256>>;
-      /**
-       * Returns transaction at given block hash and index.
-       **/
-      getTransactionByBlockHashAndIndex: AugmentedRpc<(hash: H256 | string | Uint8Array, index: U256 | AnyNumber | Uint8Array) => Observable<EthTransaction>>;
-      /**
-       * Returns transaction by given block number and index.
-       **/
-      getTransactionByBlockNumberAndIndex: AugmentedRpc<(number: BlockNumber | AnyNumber | Uint8Array, index: U256 | AnyNumber | Uint8Array) => Observable<EthTransaction>>;
-      /**
-       * Get transaction by its hash.
-       **/
-      getTransactionByHash: AugmentedRpc<(hash: H256 | string | Uint8Array) => Observable<EthTransaction>>;
-      /**
-       * Returns the number of transactions sent from given address at given time (block number).
-       **/
-      getTransactionCount: AugmentedRpc<(address: H160 | string | Uint8Array, number?: BlockNumber | AnyNumber | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns transaction receipt by transaction hash.
-       **/
-      getTransactionReceipt: AugmentedRpc<(hash: H256 | string | Uint8Array) => Observable<EthReceipt>>;
-      /**
-       * Returns an uncles at given block and index.
-       **/
-      getUncleByBlockHashAndIndex: AugmentedRpc<(hash: H256 | string | Uint8Array, index: U256 | AnyNumber | Uint8Array) => Observable<EthRichBlock>>;
-      /**
-       * Returns an uncles at given block and index.
-       **/
-      getUncleByBlockNumberAndIndex: AugmentedRpc<(number: BlockNumber | AnyNumber | Uint8Array, index: U256 | AnyNumber | Uint8Array) => Observable<EthRichBlock>>;
-      /**
-       * Returns the number of uncles in a block with given hash.
-       **/
-      getUncleCountByBlockHash: AugmentedRpc<(hash: H256 | string | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns the number of uncles in a block with given block number.
-       **/
-      getUncleCountByBlockNumber: AugmentedRpc<(number: BlockNumber | AnyNumber | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns the hash of the current block, the seedHash, and the boundary condition to be met.
-       **/
-      getWork: AugmentedRpc<() => Observable<EthWork>>;
-      /**
-       * Returns the number of hashes per second that the node is mining with.
-       **/
-      hashrate: AugmentedRpc<() => Observable<U256>>;
-      /**
-       * Returns max priority fee per gas
-       **/
-      maxPriorityFeePerGas: AugmentedRpc<() => Observable<U256>>;
-      /**
-       * Returns true if client is actively mining new blocks.
-       **/
-      mining: AugmentedRpc<() => Observable<bool>>;
-      /**
-       * Returns id of new block filter.
-       **/
-      newBlockFilter: AugmentedRpc<() => Observable<U256>>;
-      /**
-       * Returns id of new filter.
-       **/
-      newFilter: AugmentedRpc<(filter: EthFilter | { fromBlock?: any; toBlock?: any; blockHash?: any; address?: any; topics?: any } | string | Uint8Array) => Observable<U256>>;
-      /**
-       * Returns id of new block filter.
-       **/
-      newPendingTransactionFilter: AugmentedRpc<() => Observable<U256>>;
-      /**
-       * Returns protocol version encoded as a string (quotes are necessary).
-       **/
-      protocolVersion: AugmentedRpc<() => Observable<u64>>;
-      /**
-       * Sends signed transaction, returning its hash.
-       **/
-      sendRawTransaction: AugmentedRpc<(bytes: Bytes | string | Uint8Array) => Observable<H256>>;
-      /**
-       * Sends transaction; will block waiting for signer to return the transaction hash
-       **/
-      sendTransaction: AugmentedRpc<(tx: EthTransactionRequest | { from?: any; to?: any; gasPrice?: any; gas?: any; value?: any; data?: any; nonce?: any } | string | Uint8Array) => Observable<H256>>;
-      /**
-       * Used for submitting mining hashrate.
-       **/
-      submitHashrate: AugmentedRpc<(index: U256 | AnyNumber | Uint8Array, hash: H256 | string | Uint8Array) => Observable<bool>>;
-      /**
-       * Used for submitting a proof-of-work solution.
-       **/
-      submitWork: AugmentedRpc<(nonce: H64 | string | Uint8Array, headerHash: H256 | string | Uint8Array, mixDigest: H256 | string | Uint8Array) => Observable<bool>>;
-      /**
-       * Subscribe to Eth subscription.
-       **/
-      subscribe: AugmentedRpc<(kind: EthSubKind | 'newHeads' | 'logs' | 'newPendingTransactions' | 'syncing' | number | Uint8Array, params?: EthSubParams | { None: any } | { Logs: any } | string | Uint8Array) => Observable<Null>>;
-      /**
-       * Returns an object with data about the sync status or false.
-       **/
-      syncing: AugmentedRpc<() => Observable<EthSyncStatus>>;
-      /**
-       * Uninstalls filter.
-       **/
-      uninstallFilter: AugmentedRpc<(index: U256 | AnyNumber | Uint8Array) => Observable<bool>>;
-    };
-    grandpa: {
-      /**
-       * Prove finality for the given block number, returning the Justification for the last block in the set.
-       **/
-      proveFinality: AugmentedRpc<(blockNumber: BlockNumber | AnyNumber | Uint8Array) => Observable<Option<EncodedFinalityProofs>>>;
-      /**
-       * Returns the state of the current best round state as well as the ongoing background rounds
-       **/
-      roundState: AugmentedRpc<() => Observable<ReportedRoundStates>>;
-      /**
-       * Subscribes to grandpa justifications
-       **/
-      subscribeJustifications: AugmentedRpc<() => Observable<JustificationNotification>>;
-    };
-    mmr: {
-      /**
-       * Generate MMR proof for the given block numbers.
-       **/
-      generateProof: AugmentedRpc<(blockNumbers: Vec<u64> | (u64 | AnyNumber | Uint8Array)[], bestKnownBlockNumber?: u64 | AnyNumber | Uint8Array, at?: BlockHash | string | Uint8Array) => Observable<MmrLeafBatchProof>>;
-      /**
-       * Get the MMR root hash for the current best block.
-       **/
-      root: AugmentedRpc<(at?: BlockHash | string | Uint8Array) => Observable<MmrHash>>;
-      /**
-       * Verify an MMR proof
-       **/
-      verifyProof: AugmentedRpc<(proof: MmrLeafBatchProof | { blockHash?: any; leaves?: any; proof?: any } | string | Uint8Array) => Observable<bool>>;
-      /**
-       * Verify an MMR proof statelessly given an mmr_root
-       **/
-      verifyProofStateless: AugmentedRpc<(root: MmrHash | string | Uint8Array, proof: MmrLeafBatchProof | { blockHash?: any; leaves?: any; proof?: any } | string | Uint8Array) => Observable<bool>>;
-    };
-    net: {
-      /**
-       * Returns true if client is actively listening for network connections. Otherwise false.
-       **/
-      listening: AugmentedRpc<() => Observable<bool>>;
-      /**
-       * Returns number of peers connected to node.
-       **/
-      peerCount: AugmentedRpc<() => Observable<Text>>;
-      /**
-       * Returns protocol version.
-       **/
-      version: AugmentedRpc<() => Observable<Text>>;
-    };
-    offchain: {
-      /**
-       * Get offchain local storage under given key and prefix
-       **/
-      localStorageGet: AugmentedRpc<(kind: StorageKind | 'PERSISTENT' | 'LOCAL' | number | Uint8Array, key: Bytes | string | Uint8Array) => Observable<Option<Bytes>>>;
-      /**
-       * Set offchain local storage under given key and prefix
-       **/
-      localStorageSet: AugmentedRpc<(kind: StorageKind | 'PERSISTENT' | 'LOCAL' | number | Uint8Array, key: Bytes | string | Uint8Array, value: Bytes | string | Uint8Array) => Observable<Null>>;
     };
     payment: {
       /**
@@ -519,12 +256,6 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
        **/
       trieMigrationStatus: AugmentedRpc<(at?: BlockHash | string | Uint8Array) => Observable<MigrationStatusResult>>;
     };
-    syncstate: {
-      /**
-       * Returns the json-serialized chainspec running the node, with a sync state.
-       **/
-      genSyncSpec: AugmentedRpc<(raw: bool | boolean | Uint8Array) => Observable<Json>>;
-    };
     system: {
       /**
        * Retrieves the next accountIndex as available on the node
@@ -602,16 +333,6 @@ declare module '@polkadot/rpc-core/types/jsonrpc' {
        * Retrieves the version of the node
        **/
       version: AugmentedRpc<() => Observable<Text>>;
-    };
-    web3: {
-      /**
-       * Returns current client version.
-       **/
-      clientVersion: AugmentedRpc<() => Observable<Text>>;
-      /**
-       * Returns sha3 of the given data
-       **/
-      sha3: AugmentedRpc<(data: Bytes | string | Uint8Array) => Observable<H256>>;
     };
   } // RpcInterface
 } // declare module

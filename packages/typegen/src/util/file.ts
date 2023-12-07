@@ -16,7 +16,7 @@ export function writeFile (dest: string, generator: () => string, noLog?: boolea
     generated = generated.replace(/\n\n\n/g, '\n\n');
   }
 
-  !noLog && console.log('\tWriting');
+  !noLog && console.log(`\tWriting ${dest}`);
 
   fs.writeFileSync(dest, generated, { flag: 'w' });
 

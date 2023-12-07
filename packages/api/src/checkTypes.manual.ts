@@ -19,19 +19,6 @@ import { createTypeUnsafe, TypeRegistry } from '@polkadot/types/create';
 
 const registry = new TypeRegistry();
 
-async function calls (api: ApiPromise): Promise<void> {
-  // it allows defaults
-  const testSetId = await api.call.grandpaApi.currentSetId();
-
-  // it allows type overrides (generally shouldn't be used, but available)
-  const testSetIdO = await api.call.grandpaApi.currentSetId<AccountId>();
-
-  // it allows actual params
-  const nonce = await api.call.accountNonceApi.accountNonce('5Test');
-
-  console.log(testSetId.toNumber(), testSetIdO.isAscii, nonce.toNumber());
-}
-
 function consts (api: ApiPromise): void {
   // constants has actual value & metadata
   console.log(
@@ -54,12 +41,6 @@ async function derive (api: ApiPromise): Promise<void> {
 
 function errors (api: ApiPromise): void {
   const someError = {} as DispatchErrorModule;
-
-  // existing
-  console.log(api.errors.vesting.AmountLow.is(someError));
-
-  // non-existing error, existing module
-  console.log(api.errors.vesting['NonAugmented'].is(someError));
 
   // something random
   console.log(api.errors['thisIsNot']['Augmented'].is(someError));
@@ -89,13 +70,6 @@ function events (api: ApiPromise): void {
     );
   }
 
-  // something with only tuple data
-  if (api.events.staking.Bonded.is(event)) {
-    const [account, amount] = event.data;
-
-    console.log(account.toHuman(), amount.toBn());
-  }
-
   // something random, just codec[]
   if (api.events['not']['Augmented'].is(event)) {
     const [a, b] = event.data;
@@ -105,10 +79,6 @@ function events (api: ApiPromise): void {
 }
 
 async function query (api: ApiPromise, pairs: TestKeyringMapSubstrate): Promise<void> {
-  const intentions = await api.query.staking.bonded();
-
-  console.log('intentions:', intentions);
-
   // api.query.*.* is well-typed
   const bar = await api.query['notIn']['augmentation'](); // bar is Codec (unknown module)
   const bal = await api.query.balances.totalIssuance(); // bal is Balance
@@ -151,13 +121,6 @@ async function queryExtra (api: ApiPromise): Promise<void> {
 
   // check entries()
   await api.query.system.account.entries(); // should not take a param
-  await api.query.staking.nominatorSlashInEra.entries(123); // should take a param
-
-  // nmap with keys
-  await api.query.assets.approvals.keys(123, 'blah');
-  await api.query.assets.account.keys(123);
-  await api.query.assets.account.entries(123);
-  await api.query.assets['notAugmented'].keys();
 
   // is
   const key = {} as StorageKey;
@@ -173,7 +136,6 @@ async function queryExtra (api: ApiPromise): Promise<void> {
 async function queryMulti (api: ApiPromise, pairs: TestKeyringMapSubstrate): Promise<void> {
   // check multi for unsub
   const multiUnsub = await api.queryMulti([
-    [api.query.staking.validators],
     [api.query.system.events]
   ], (values): void => {
     console.log('values', values);
@@ -194,7 +156,6 @@ async function queryMulti (api: ApiPromise, pairs: TestKeyringMapSubstrate): Pro
   const apiAt = await api.at('0x12345678');
   const multiResAt = await apiAt.queryMulti([
     api.query.timestamp.now,
-    [apiAt.query.staking.validators],
     [apiAt.query.system.account, pairs.eve.address]
   ]);
 
@@ -272,22 +233,6 @@ async function tx (api: ApiPromise, pairs: TestKeyringMapSubstrate): Promise<voi
 
       unsub2();
     });
-
-  // it allows for query & then using the submittable
-  const second = api.tx.democracy.second(123);
-
-  await second.signAndSend('123', (result) => console.log(result));
-
-  // it handles enum inputs correctly
-  await api.tx.democracy['proxyVote'](123, { Split: { nay: 456, yay: 123 } }).signAndSend(pairs.alice);
-
-  // is
-  if (api.tx.balances.transferAllowDeath.is(second)) {
-    const [recipientId, balance] = second.args;
-
-    // should be LookupSource & Balance types
-    console.log(recipientId.toHuman(), balance.toNumber());
-  }
 }
 
 async function at (api: ApiPromise): Promise<void> {
@@ -305,7 +250,6 @@ async function main (): Promise<void> {
   const pairs = createTestPairs();
 
   await Promise.all([
-    calls(api),
     consts(api),
     derive(api),
     errors(api),

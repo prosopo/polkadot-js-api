@@ -17,8 +17,6 @@ import { Metadata, TypeRegistry, Vec } from '@polkadot/types';
 import * as definitions from '@polkadot/types/interfaces/definitions';
 import { getStorage as getSubstrateStorage } from '@polkadot/types/metadata/decorate/storage/getStorage';
 import { unwrapStorageType } from '@polkadot/types/util';
-import kusamaMeta, { rpc as kusamaRpc, version as kusamaVer } from '@polkadot/types-support/metadata/static-kusama';
-import polkadotMeta, { rpc as polkadotRpc, version as polkadotVer } from '@polkadot/types-support/metadata/static-polkadot';
 import substrateMeta from '@polkadot/types-support/metadata/static-substrate';
 import { isHex, stringCamelCase, stringLowerFirst } from '@polkadot/util';
 import { blake2AsHex } from '@polkadot/util-crypto';
@@ -55,16 +53,6 @@ interface StaticDef {
 const headerFn = (runtimeDesc: string) => `\n\n(NOTE: These were generated from a static/snapshot view of a recent ${runtimeDesc}. Some items may not be available in older nodes, or in any customized implementations.)`;
 
 const ALL_STATIC: Record<string, StaticDef> = {
-  kusama: {
-    meta: kusamaMeta,
-    rpc: kusamaRpc,
-    ver: kusamaVer as unknown as { apis: ApiDef[] }
-  },
-  polkadot: {
-    meta: polkadotMeta,
-    rpc: polkadotRpc,
-    ver: polkadotVer as unknown as { apis: ApiDef[] }
-  },
   substrate: {
     meta: substrateMeta
   }

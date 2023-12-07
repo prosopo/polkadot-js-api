@@ -96,6 +96,8 @@ async function mainPromise (): Promise<void> {
 
   let metaHex: HexString;
 
+  console.log('getting types for endpoint', endpoint);
+
   if (endpoint.startsWith('wss://') || endpoint.startsWith('ws://')) {
     metaHex = await getMetadataViaWs(endpoint);
   } else {

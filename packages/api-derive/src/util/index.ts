@@ -5,7 +5,6 @@
 export { drr, memo } from '@polkadot/rpc-core';
 
 // all starred
-export * from './approvalFlagsToBools.js';
 export * from './blockNumber.js';
 export * from './cache.js';
 export * from './cacheImpl.js';

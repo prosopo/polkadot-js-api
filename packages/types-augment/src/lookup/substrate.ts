@@ -578,7 +578,7 @@ export default {
   PalletDemocracyVoteAccountVote: {
     _enum: {
       Standard: {
-        vote: 'Vote',
+        vote: 'u8',
         balance: 'u128',
       },
       Split: {
@@ -4520,7 +4520,7 @@ export default {
   PalletConvictionVotingVoteAccountVote: {
     _enum: {
       Standard: {
-        vote: 'Vote',
+        vote: 'u8',
         balance: 'u128',
       },
       Split: {
